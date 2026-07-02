@@ -2,8 +2,8 @@
   <div>
     <h1>Login</h1>
     <form action="" @submit.prevent="handleSubmit">
-      <input type="email" v-model.trim="email">
-      <input type="password" v-model.trim="password">
+      <input type="email" v-model.trim="email" autocomplete="username">
+      <input type="password" v-model.trim="password" autocomplete="current-password">
       <button type="submit" :disabled="userStore.loadingUser">Log in</button>
     </form>
   </div>

@@ -4,6 +4,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
+  onAuthStateChanged,
 } from "firebase/auth";
 import { auth } from "./../firebaseConfig.js";
 import router from "../router.js";
@@ -13,13 +14,14 @@ export const useUserStore = defineStore("userStore", {
   state: () => {
     return {
       userData: null,
-      loadingUser: false
+      loadingUser: false,
+      loadingSession: false
     };
   },
   actions: {
     // modify the state
     async registerUser(email, password) {
-      this.loadingUser = true
+      this.loadingUser = true;
       try {
         const { user } = await createUserWithEmailAndPassword(
           auth,
@@ -31,11 +33,11 @@ export const useUserStore = defineStore("userStore", {
       } catch (error) {
         console.error("An error occurred while creating the user.", error);
       } finally {
-        this.loadingUser = false
+        this.loadingUser = false;
       }
     },
     async loginUser(email, password) {
-        this.loadingUser = true
+      this.loadingUser = true;
 
       try {
         const { user } = await signInWithEmailAndPassword(
@@ -51,11 +53,11 @@ export const useUserStore = defineStore("userStore", {
           error,
         );
       } finally {
-        this.loadingUser = false
+        this.loadingUser = false;
       }
     },
     async logoutUser() {
-              this.loadingUser = true
+      this.loadingUser = true;
 
       try {
         await signOut(auth);
@@ -66,9 +68,27 @@ export const useUserStore = defineStore("userStore", {
           "An error occurred while closing the user session.",
           error,
         );
-      }finally {
-        this.loadingUser = false
+      } finally {
+        this.loadingUser = false;
       }
+    },
+    currentUser() {
+      return new Promise((resolve, reject) => {
+        // onAuthStateChanged(Auth, Callback to observe changes to the user's sign-in state)
+        onAuthStateChanged(
+          auth,
+          (user) => {
+            if (user) {
+              this.userData = { email: user.email, uid: user.uid };
+            } else {
+              // The user is not authenticated
+              this.userData = null;
+            }
+            resolve(user);
+          },
+          (e) => reject(e),
+        );
+      });
     },
   },
 });
