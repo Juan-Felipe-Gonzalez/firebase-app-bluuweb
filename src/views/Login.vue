@@ -17,8 +17,8 @@ import { useUserStore } from "../stores/user";
 const userStore = useUserStore()
 const router = useRouter()
 
-const email = ref("jfelipeg05@gmail.com")
-const password = ref("123412")
+const email = ref("")
+const password = ref("")
 
 const handleSubmit = async () => {
 

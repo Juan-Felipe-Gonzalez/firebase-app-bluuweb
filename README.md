@@ -28,3 +28,16 @@ import { useRouter } from "vue-router";
 const router = useRouter()
 router.push("/")
 ```
+
+## Deploy on firebase
+
+``` sh
+npm run build 
+```
+
+``` sh
+npm install -g firebase-tools
+firebase login
+firebase init
+firebase deploy
+```
