@@ -8,7 +8,7 @@
       <router-link to="/" v-if="userStore.userData">Home</router-link> |
       <router-link to="/login" v-if="!userStore.userData">Login</router-link> |
       <router-link to="/register" v-if="!userStore.userData">Register</router-link> |
-      <button @click="userStore.logoutUser" :disabled="userStore.loadingUser" >{{user}}</button> 
+      <button @click="userStore.logoutUser" :disabled="userStore.loadingUser" v-if="userStore.userData">Sign Out</button> 
     </nav>
 
     <div v-else>
@@ -22,7 +22,5 @@
 <script setup>
   import { useUserStore } from './stores/user';
   const userStore = useUserStore()
-
-  const user = userStore.userData ? "Sign In " : "Sign Out"
 
 </script>

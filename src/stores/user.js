@@ -9,6 +9,7 @@ import {
 import { auth } from "./../firebaseConfig.js";
 import router from "../router.js";
 // import { useRouter } from "vue-router"; we can't use this option
+import {useDatabaseStore} from "./database"
 
 export const useUserStore = defineStore("userStore", {
   state: () => {
@@ -59,6 +60,9 @@ export const useUserStore = defineStore("userStore", {
     async logoutUser() {
       this.loadingUser = true;
 
+      const databaseStore = useDatabaseStore()
+      databaseStore.$reset()
+
       try {
         await signOut(auth);
         this.userData = null;
@@ -83,6 +87,8 @@ export const useUserStore = defineStore("userStore", {
             } else {
               // The user is not authenticated
               this.userData = null;
+              const databaseStore = useDatabaseStore()
+              databaseStore.$reset()
             }
             resolve(user);
           },
