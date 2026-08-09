@@ -1,26 +1,68 @@
 <!-- We can create a layout -->
 <template>
-  <div>
-    <h1>Hello world</h1>
-    
-    <!-- more info: router.js -->
-    <nav style="display: flex; gap: 1rem;" v-if="!userStore.loadingSession">
-      <router-link to="/" v-if="userStore.userData">Home</router-link> |
-      <router-link to="/login" v-if="!userStore.userData">Login</router-link> |
-      <router-link to="/register" v-if="!userStore.userData">Register</router-link> |
-      <button @click="userStore.logoutUser" :disabled="userStore.loadingUser" v-if="userStore.userData">Sign Out</button> 
-    </nav>
+  <a-layout>
+    <a-layout-header v-if="!userStore.loadingSession">
+      <a-menu
+        theme="dark"
+        mode="horizontal"
+        :style="{ lineHeight: '64px' }"
+        v-model:selectedKeys="selectedKey"
+      >
+        <a-menu-item v-if="userStore.userData" key="home">
+          <router-link to="/">Home</router-link>
+        </a-menu-item>
+        <a-menu-item v-if="!userStore.userData" key="login">
+          <router-link to="/login">Login</router-link>
+        </a-menu-item>
+        <a-menu-item v-if="!userStore.userData" key="register">
+          <router-link to="/register">Register</router-link>
+        </a-menu-item>
+        <a-menu-item
+          @click="userStore.logoutUser"
+          v-if="userStore.userData"
+          key="logout"
+        >
+          Log Out
+        </a-menu-item>
+      </a-menu>
+      <!-- more info: router.js -->
+      <nav style="display: flex; gap: 1rem"></nav>
+    </a-layout-header>
 
-    <div v-else>
-      loading user...
-    </div>
-    
-    <router-view></router-view>
-  </div>
+    <a-layout-content style="padding: 50px">
+      <div class="container">
+        <div v-if="userStore.loadingSession">loading user...</div>
+        <router-view></router-view>
+      </div>
+    </a-layout-content>
+  </a-layout>
 </template>
 
 <script setup>
-  import { useUserStore } from './stores/user';
-  const userStore = useUserStore()
+import { ref, watch } from "vue";
+import { useUserStore } from "./stores/user";
+import { useRoute } from "vue-router";
 
+const userStore = useUserStore();
+const route = useRoute();
+const selectedKey = ref([]);
+
+// To highlight current page at the nav bar
+watch(
+  () => route.name,
+  () => {
+    selectedKey.value = [route.name];
+  },
+);
 </script>
+
+<style>
+.container {
+  background-color: #fff;
+  padding: 24px;
+  min-height: calc(100vh - 64px);
+}
+.text-center{
+  text-align: center;
+}
+</style>
