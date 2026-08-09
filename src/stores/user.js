@@ -29,10 +29,11 @@ export const useUserStore = defineStore("userStore", {
           email,
           password,
         );
-        this.userData = { email: user.email, uid: user.uid };
-        router.push("/");
+        // this.userData = { email: user.email, uid: user.uid };
+        router.push("/login");
       } catch (error) {
         console.error("An error occurred while creating the user.", error);
+        return error.code
       } finally {
         this.loadingUser = false;
       }
@@ -53,6 +54,7 @@ export const useUserStore = defineStore("userStore", {
           "An error occurred while the user was logging in.",
           error,
         );
+        return error.code
       } finally {
         this.loadingUser = false;
       }

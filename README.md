@@ -23,13 +23,14 @@ Getters: Dont modify the state
 Actions: Modify the state
 
 ## Navigate / replace / href / location
+
 ``` sh
 import { useRouter } from "vue-router";
 const router = useRouter()
 router.push("/")
 ```
 
-## Deploy on firebase
+## Deploy first time on firebase
 
 ``` sh
 npm run build 
@@ -40,4 +41,11 @@ npm install -g firebase-tools
 firebase login
 firebase init
 firebase deploy
+```
+
+## Deploy on firebase
+
+``` sh
+npm run build
+firebase deploy 
 ```
